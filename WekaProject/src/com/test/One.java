@@ -30,6 +30,6 @@ public class One extends JFrame {
 			e.printStackTrace();
 		}
 	    this.dispose();
-	    guiapp = new MainGuiApplication();
+	   
 	}
 }

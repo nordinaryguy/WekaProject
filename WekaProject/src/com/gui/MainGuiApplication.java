@@ -13,12 +13,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.core.ArffParser;
+import com.core.MainCore;
+import com.patternObs.Observer;
 
-public class MainGuiApplication extends JFrame {
+public class MainGuiApplication extends JFrame implements Observer {
 
-	private JPanel pan;
+	private MainPanel pan;
+	private MainCore mainCore;
 	private JMenuBar menu = new JMenuBar();
-	private ArffParser ap;
 
 	private JMenu file = new JMenu("File"),
 			about = new JMenu("About");
@@ -30,42 +32,44 @@ public class MainGuiApplication extends JFrame {
 	private String arfffilepath = null;
 	private String arfffilename = null;
 
-	public MainGuiApplication(){             
-
+	public MainGuiApplication(MainCore mc){             
+		this.mainCore = mc;
+		this.init();
+		this.initMenu();
 	}
 
-	public void init() {
+	private void init() {
 		this.setTitle("Machine Learning : Sequential Coverage");
 		this.setSize(800,600);
 		this.setLocationRelativeTo(null);   
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//Instanciation d'un objet JPanel
-		pan = new JPanel();
+		pan = new MainPanel();
 		//Définition de sa couleur de fond
 		pan.setBackground(Color.LIGHT_GRAY);        
 		//On prévient notre JFrame que notre JPanel sera son content pane
 		this.setContentPane(pan);    
-		this.initMenu();
 		this.setVisible(true);
 	}
 
-	public void initMenu() {
+	private void initMenu() {
 		//Premier onglet File
 		open.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				JFileChooser choix = new JFileChooser();
 				int retour=choix.showOpenDialog(null);
 				if(retour==JFileChooser.APPROVE_OPTION){
-				   // un fichier a été choisi (sortie par OK)
-				   // nom du fichier  choisi 
-				 arfffilename =  choix.getSelectedFile().getName();
-				   // chemin absolu du fichier choisi
-				 arfffilepath = choix.getSelectedFile().getAbsolutePath();
-				 ap = new ArffParser(arfffilename, arfffilepath);
-				 ap.parseAndDisplay();
+					// un fichier a été choisi (sortie par OK)
+					// nom du fichier  choisi 
+					arfffilename =  choix.getSelectedFile().getName();
+					// chemin absolu du fichier choisi
+					arfffilepath = choix.getSelectedFile().getAbsolutePath();
+					mainCore.parseArffFile(arfffilename, arfffilepath);
+					//ap = new ArffParser(arfffilename, arfffilepath);
+					//ap.parseAndDisplay();
 				}else {
 					System.out.println("Pas de fichier choisi!");
 				};
@@ -74,7 +78,7 @@ public class MainGuiApplication extends JFrame {
 		file.add(open);
 		file.addSeparator();
 		quit.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
@@ -85,23 +89,28 @@ public class MainGuiApplication extends JFrame {
 
 		//Deuxieme onglet About
 		aboutItem.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//Boîte du message d'information
-				JOptionPane jop1 = new JOptionPane();
-				jop1.showMessageDialog(null, "Machine Learning : Sequential Coverage\nDUMONT Hugues - HUET Guillaume\nM1 Informatique - Université d'Angers\n2018", "About", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Machine Learning : Sequential Coverage\nDUMONT Hugues - HUET Guillaume\nM1 Informatique - Université d'Angers\n2018", "About", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		about.add(aboutItem);
-		
-		
+
+
 		//Ajout des onglets menus dans la barre de menus
 		menu.add(file);
 		menu.add(about);
-		
+
 		//Ajout de la barre de menus dans la fenetre
 		this.setJMenuBar(menu);
+	}
+
+	@Override
+	public void update(String str) {
+		// TODO Auto-generated method stub
+		pan.getInstancesArea().append(str+"\n");
 	}
 }

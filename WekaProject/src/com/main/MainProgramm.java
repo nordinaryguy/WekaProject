@@ -1,16 +1,18 @@
 package com.main;
 
+import com.core.MainCore;
+import com.gui.MainGuiApplication;
 import com.gui.StartView;
+import com.test.ExempleJTextPane;
 
 
 public class MainProgramm {
 
 	public static void main(String[] args) throws InterruptedException {
-		// TODO Auto-generated method stub
-		//System.out.println("Hello world!");
-		//MainGuiApplication guiapp = new MainGuiApplication();
 		StartView sv = new StartView();
-		sv.init();
+		MainCore mainCore = new MainCore();
+		MainGuiApplication guiapp = new MainGuiApplication(mainCore);
+		mainCore.addObserver(guiapp);
 	}
 
 }
