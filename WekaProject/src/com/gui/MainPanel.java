@@ -71,6 +71,7 @@ public class MainPanel extends JPanel {
 		middlePanel.add(go);
 		middlePanel.add(Box.createVerticalStrut(5));
 		middlePanel.add(clear);
+		middlePanel.add(Box.createVerticalStrut(5));
 		middlePanel.setBorder(border);
 		middle2Panel = new JPanel();
 		middle2Panel.setLayout(new GridBagLayout());

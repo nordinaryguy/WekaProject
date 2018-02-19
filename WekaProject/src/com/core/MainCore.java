@@ -11,11 +11,13 @@ public class MainCore implements Observable {
 
 	public  void parseArffFile(String arffName, String arffpath) {
 		ArffParser arffParser = new ArffParser(arffName, arffpath);
-		ArrayList<String> listInst = new ArrayList<String>();
+		String dataset = arffParser.getStringDataSet();
+		this.notifyObserver(dataset);
+		/*ArrayList<String> listInst = new ArrayList<String>();
 		listInst = arffParser.getStringInstances();
 		for(String instance : listInst) {
 			this.notifyObserver(instance);
-		}
+		}*/
 	}
 
 	@Override
